@@ -1,25 +1,25 @@
 import unittest
-from APIConnect import APIConnect
+from connect import connect as APIConnect
 
 def fun(x):
     return x + 1
 
-class APIConnectTests(unittest.TestCase):
+class connecttests(unittest.TestCase):
     def testBuildURL(self):
-      api = APIConnect()
+      connect = APIConnect()
 
       # url only
-      self.assertEqual(api.buildURL("http://example.com"), "http://example.com")
-      self.assertEqual(api.buildURL("http://example.com/"), "http://example.com")
+      self.assertEqual(connect.buildURL("http://example.com"), "http://example.com")
+      self.assertEqual(connect.buildURL("http://example.com/"), "http://example.com")
 
       # url segment only
-      self.assertEqual(api.buildURL(
+      self.assertEqual(connect.buildURL(
          "http://example.com",
          [ "v1", "/api/" ]
       ), "http://example.com/v1/api")
 
       # param only
-      self.assertEqual(api.buildURL(
+      self.assertEqual(connect.buildURL(
          "http://example.com",
          params = {
             "token" : "abcd",
@@ -28,7 +28,7 @@ class APIConnectTests(unittest.TestCase):
       ), "http://example.com?token=abcd&details=1")
 
       # segment and param
-      self.assertEqual(api.buildURL(
+      self.assertEqual(connect.buildURL(
          "http://example.com",
          [ "v1", "api" ],
          {

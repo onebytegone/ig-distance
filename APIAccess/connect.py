@@ -3,10 +3,10 @@
 import urllib2
 from urllib import urlencode
 
-class APIConnect(object):
-   """APIConnect abstracts calls to endpoints"""
+class connect(object):
+   """connect abstracts calls to endpoints"""
    def __init__(self):
-      super(APIConnect, self).__init__()
+      super(connect, self).__init__()
 
    def call(self, baseurl, segments, urlparams = [], method = "GET"):
       pass
