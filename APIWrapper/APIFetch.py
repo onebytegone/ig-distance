@@ -1,6 +1,7 @@
 # Copyright 2015 Ethan Smith
 
 import urllib2
+from urllib import urlencode
 
 class APIFetch(object):
    """APIFetch abstracts calls to endpoints"""
@@ -21,7 +22,6 @@ class APIFetch(object):
 
       # generate url params
       if len(params) > 0:
-         pairedParams = map(lambda k, v: str(k) + "=" + str(v), params,  params.values())
-         url += '?' + '&'.join(pairedParams)
+         url += '?' + urlencode(params)
 
       return url
