@@ -1,5 +1,6 @@
 # Copyright 2015 Ethan Smith
 
+import logging
 import urllib2
 from urllib import urlencode
 
@@ -9,7 +10,8 @@ class connect(object):
       super(connect, self).__init__()
 
    def call(self, baseurl, segments, urlparams = [], method = "GET"):
-      pass
+      url = self.buildURL(baseurl, segments, urlparams)
+      logging.info('Accessing: ' + url)
 
    def buildURL(self, base, segments = [], params = {}):
       url = base.rstrip('/')
