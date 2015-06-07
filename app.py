@@ -1,12 +1,14 @@
 #!/usr/bin/python2.7
 # Copyright 2015 Ethan Smith
 
+import logging
 import ConfigParser
 from IGWrapper import IGWrapper
 from urllib import urlencode
 
 config = ConfigParser.RawConfigParser()
 config.read('config.cfg')
+logging.basicConfig(level=config.getint('logs', 'level'))
 
 print "Using client id: " + config.get('API', 'client_id')
 print "Using access token: " + config.get('API', 'access_token')
