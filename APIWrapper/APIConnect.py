@@ -5,11 +5,10 @@ from urllib import urlencode
 
 class APIConnect(object):
    """APIConnect abstracts calls to endpoints"""
-   def __init__(self, baseurl = ""):
+   def __init__(self):
       super(APIConnect, self).__init__()
-      self.baseurl = baseurl
 
-   def call(self, segments, urlparams = [], method = "GET"):
+   def call(self, baseurl, segments, urlparams = [], method = "GET"):
       pass
 
    def buildURL(self, base, segments = [], params = {}):
