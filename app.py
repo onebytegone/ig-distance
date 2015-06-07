@@ -2,6 +2,7 @@
 # Copyright 2015 Ethan Smith
 
 import ConfigParser
+from IGWrapper import IGWrapper
 from urllib import urlencode
 
 config = ConfigParser.RawConfigParser()
@@ -11,23 +12,12 @@ print "Using client id: " + config.get('API', 'client_id')
 print "Using access token: " + config.get('API', 'access_token')
 
 client_id = config.get('API', 'client_id')
-authorize_url = config.get('API', 'authorize_url')
-
-
-def get_authorize_url(authorize_url, client_id, redirect_uri):
-    client_params = {
-        "client_id": client_id,
-        "response_type": "token",
-        "redirect_uri": redirect_uri
-    }
-    url_params = urlencode(client_params)
-    return "%s?%s" % (authorize_url, url_params)
 
 
 def getAccessTokenFromUser():
    print "No valid access token."
    print "Please authorize this app at: "
-   print get_authorize_url(authorize_url, client_id, config.get('API', 'redirect_uri'))
+   print IGWrapper.get_authorize_url(client_id, config.get('API', 'redirect_uri'))
 
    hasAuthorized = 'n'
    while hasAuthorized.lower() == 'n':
