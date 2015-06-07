@@ -3,10 +3,10 @@
 import urllib2
 from urllib import urlencode
 
-class APIFetch(object):
-   """APIFetch abstracts calls to endpoints"""
+class APIConnect(object):
+   """APIConnect abstracts calls to endpoints"""
    def __init__(self, baseurl = ""):
-      super(APIFetch, self).__init__()
+      super(APIConnect, self).__init__()
       self.baseurl = baseurl
 
    def call(self, segments, urlparams = [], method = "GET"):
