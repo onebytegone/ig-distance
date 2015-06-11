@@ -19,4 +19,4 @@ class wrapper(object):
    def _call(self, segments = [], urlparams = {}, method = "GET"):
       url = self.protocol + '://' + self.domain + '/' + self.basePath
       urlparams[self.accessTokenField] = self.accessToken
-      self.connect.call(url, segments, urlparams, method)
+      return self.connect.call(url, segments, urlparams, method)

@@ -2,6 +2,7 @@
 
 import logging
 import urllib2
+import json
 from urllib import urlencode
 
 class connect(object):
@@ -11,7 +12,12 @@ class connect(object):
 
    def call(self, baseurl, segments, urlparams = [], method = "GET"):
       url = self.buildURL(baseurl, segments, urlparams)
-      logging.info('Accessing: ' + url)
+      logging.info('Accessing: ' + method + ' ' + url)
+      req = urllib2.Request(url)
+      req.get_method = lambda: method
+      response = urllib2.urlopen(req)
+      data = response.read()
+      return json.loads(data)
 
    def buildURL(self, base, segments = [], params = {}):
       url = base.rstrip('/')
