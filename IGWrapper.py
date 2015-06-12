@@ -19,3 +19,18 @@ class IGWrapper(APIAccess.wrapper):
       }
       url_params = urlencode(client_params)
       return '%s?%s' % (authorize_url, url_params)
+
+   def userInfo(self, user_id = 'self'):
+      return self._call([ 'users', user_id ])
+
+   def follows(self, user_id = 'self'):
+      return self._call([ 'users', user_id, 'follows' ])
+
+   def followedBy(self, user_id = 'self'):
+      return self._call([ 'users', user_id, 'followed-by' ])
+
+   def posts(self, user_id = 'self'):
+      return self._call([ 'users', user_id, 'media', 'recent-by' ])
+
+   def userSearch(self, username):
+      return self._call([ 'users', 'search' ], urlparams = {'q': username})
