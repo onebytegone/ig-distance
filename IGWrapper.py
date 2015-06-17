@@ -30,7 +30,7 @@ class IGWrapper(APIAccess.wrapper):
       return self._call([ 'users', user_id, 'followed-by' ])
 
    def posts(self, user_id = 'self'):
-      return self._call([ 'users', user_id, 'media', 'recent-by' ])
+      return self._call([ 'users', user_id, 'media', 'recent' ])
 
    def userSearch(self, username):
       return self._call([ 'users', 'search' ], urlparams = {'q': username})
