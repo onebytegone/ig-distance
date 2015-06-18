@@ -22,11 +22,13 @@ class storage(object):
          outfile.write(string)
 
    def fetch(self, identifiers, name):
-      with open(self.makePath(identifiers, name), "r") as infile:
-         contents = infile.read()
-         if contents == '':
-            return {}
-         return json.loads(contents)
+      path = self.makePath(identifiers, name)
+      if os.path.isfile(path):
+         with open(path, "r") as infile:
+            contents = infile.read()
+            if contents == '':
+               return {}
+            return json.loads(contents)
       return {}
 
    def makePath(self, identifiers, name):
