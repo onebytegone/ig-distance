@@ -19,4 +19,17 @@ class wrapper(object):
    def _call(self, segments = [], urlparams = {}, method = "GET"):
       url = self.protocol + '://' + self.domain + '/' + self.basePath
       urlparams[self.accessTokenField] = self.accessToken
-      return self.connect.call(url, segments, urlparams, method)
+      data = self.connect.call(url, segments, urlparams, method)
+
+      nextURL = self.getPaginationURL(data)
+      while nextURL != None:
+         data = self.mergeFromPagination(data, self.connect.call(nextURL, "", method = method))
+         nextURL = self.getPaginationURL(data)
+
+      return data
+
+   def getPaginationURL(self, data):
+      return None
+
+   def mergeFromPagination(self, oldData, newData):
+      return oldData

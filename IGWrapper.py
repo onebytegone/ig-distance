@@ -34,3 +34,13 @@ class IGWrapper(APIAccess.wrapper):
 
    def userSearch(self, username):
       return self._call([ 'users', 'search' ], urlparams = {'q': username})
+
+   def getPaginationURL(self, data):
+      if 'pagination' in data and 'next_url' in data['pagination']:
+         return data['pagination']['next_url']
+      return None
+
+   def mergeFromPagination(self, oldData, newData):
+      mergedData = newData
+      mergedData['data'] = oldData['data']+newData['data']
+      return mergedData
