@@ -4,7 +4,10 @@
 import logging
 import ConfigParser
 from IGWrapper import IGWrapper
+import DeepThaw
 from urllib import urlencode
+
+
 
 config = ConfigParser.RawConfigParser()
 config.read('config.cfg')
@@ -36,4 +39,37 @@ def retrieveAccessToken():
 
    return access_token
 
+
+def queryForUserID(username):
+   response = api.userSearch(username)
+   users = response['data']
+   options = map(lambda x: '"' + x['username'] + '" (' + x['full_name'] + ', ' + x['id'] + ')', users)
+   print 'Which user are you referring to: (given: ' + username + ')'
+   for index, item in enumerate(options):
+      print str(index+1) + '. ' + item
+   select = raw_input('Which user [1-' + str(len(options)) + ']: ')
+
+   parsed = int(select.strip())
+   #TODO: validate response
+   user = users[parsed - 1]
+   return user['id']
+
+
+def callAPI(username, userID, endpoint, file):
+   data = getattr(api, endpoint)(userID)
+   dataStore.store(data, [username], file)
+
+
+def storeUser(username):
+   userID = queryForUserID(username)
+   callAPI(username, userID, 'userInfo', 'userinfo')
+   callAPI(username, userID, 'follows', 'follows')
+   callAPI(username, userID, 'followedBy', 'followed-by')
+   callAPI(username, userID, 'posts', 'posts')
+
+
 access_token = retrieveAccessToken()
+api = IGWrapper(access_token)
+dataStore = DeepThaw.storage('data')
+user = raw_input('Which user to fetch data for: ')
+storeUser(user)
