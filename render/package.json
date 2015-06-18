@@ -1,0 +1,16 @@
+{
+  "name": "ig-distance-render",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "cytoscape": "^2.4.2",
+    "jquery": "^2.1.4",
+    "underscore": "^1.8.3"
+  }
+}
