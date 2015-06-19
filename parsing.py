@@ -54,16 +54,24 @@ def commentsAtUserInPosts(posts, source, target):
 
    return total
 
-def commentsAtUser(group, source, target):
-   total = 0
-   for bystander in group:
-      postList = dataStore.fetch([bystander], 'posts').itervalues().next()
-      posts = postList['data']
-      total += commentsAtUserInPosts(posts, source, target)
+def filterCommentsFrom(comments, source):
+   return filter(lambda x: x['from']['username'] == source, comments)
 
-   return total
+def filterCommentsAtUser(comments, target):
+   return len(filter(lambda x: '@'+target in x['text'], comments))
+
+def extractAllComments(group):
+   comments = []
+   for user in group:
+      posts = getPostsForUser(user)
+      foundComments = map(lambda x: x['comments']['data'], posts)
+      foundComments = list(itertools.chain(*foundComments )) #flatten list
+      comments += foundComments
+   dataStore.store(comments, [], 'all_comments')
 
 
+extractAllComments(userGroup)
+allComments = dataStore.fetch([], 'all_comments').itervalues().next()
 for user in userGroup:
    print 'Parsing user: ' + user
    otherUsers = filter(lambda x: x != user, userGroup)
@@ -80,7 +88,9 @@ for user in userGroup:
       userSummary['follows'][otherUser] = doesUserFollowUser(user, otherUser)
       userSummary['likesToward'][otherUser] = likesTowardsPostsOf(user, otherUser)
       userSummary['commentsOnPosts'][otherUser] = commentsOnPostsOf(user, otherUser)
-      userSummary['commentsToward'][otherUser] = commentsAtUser(userGroup, user, otherUser)
+      comments = filterCommentsFrom(allComments, user)
+      userSummary['numOfCommentsMade'] = len(comments)
+      userSummary['commentsToward'][otherUser] = filterCommentsAtUser(comments, otherUser)
 
    summary[user] = userSummary
 
