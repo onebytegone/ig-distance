@@ -8,18 +8,20 @@ import ssl
 
 class connect(object):
    """connect abstracts calls to endpoints"""
+   callCount = 0
    def __init__(self):
       super(connect, self).__init__()
 
    def call(self, baseurl, segments, urlparams = [], method = "GET"):
       url = self.buildURL(baseurl, segments, urlparams)
-      logging.info('Accessing: ' + method + ' ' + url)
+      logging.info(str(self.callCount) + ' - Accessing: ' + method + ' ' + url)
       req = urllib2.Request(url)
       req.get_method = lambda: method
       data = "{}"
 
       for attempt in range(3):
          try:
+            self.callCount += 1
             response = urllib2.urlopen(req, timeout = 2)
             data = response.read()
          except urllib2.HTTPError, e:
