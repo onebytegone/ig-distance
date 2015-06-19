@@ -32,6 +32,12 @@ class IGWrapper(APIAccess.wrapper):
    def posts(self, user_id = 'self'):
       return self._call([ 'users', user_id, 'media', 'recent' ])
 
+   def commentsForPost(self, media_id):
+      return self._call([ 'media', media_id, 'comments' ])
+
+   def likesForPost(self, media_id):
+      return self._call([ 'media', media_id, 'likes' ])
+
    def userSearch(self, username):
       return self._call([ 'users', 'search' ], urlparams = {'q': username})
 
