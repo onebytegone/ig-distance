@@ -5,6 +5,7 @@ import logging
 import ConfigParser
 import DeepThaw
 import os
+import itertools
 
 config = ConfigParser.RawConfigParser()
 config.read('config.cfg')
@@ -14,10 +15,15 @@ dataStore = DeepThaw.storage('data')
 
 toAnalyze = os.listdir('data')
 userGroup = filter(lambda x: x[0] != '.', toAnalyze)
+userGroup = filter(lambda x: x != 'summary.json', userGroup)
+userGroup = filter(lambda x: x != 'all_comments.json', userGroup)
 print userGroup
 
 
 summary = {}
+
+def getPostsForUser(user):
+   return dataStore.fetch([user], 'posts').itervalues().next()['data']
 
 def userInList(user, list):
    return any(x for x in list if x['username'] == user)
@@ -30,14 +36,12 @@ def doesUserFollowUser(source, target):
    return userInList(target, followsList['data'])
 
 def likesTowardsPostsOf(source, target):
-   postList = dataStore.fetch([target], 'posts').itervalues().next()
-   stats = postList['data']
+   stats = getPostsForUser(target)
 
    return reduce(lambda carry, x: carry + (1 if userInList(source, x['likes']['data']) else 0), stats, 0)
 
 def commentsOnPostsOf(source, target):
-   postList = dataStore.fetch([target], 'posts').itervalues().next()
-   stats = postList['data']
+   stats = getPostsForUser(target)
 
    return reduce(lambda carry, x: carry + (1 if  userDidCommentOnPost(source, x['comments']) else 0), stats, 0)
 
