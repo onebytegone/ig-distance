@@ -29,7 +29,7 @@ class connect(object):
          except urllib2.URLError, e:
             print 'URLError = ' + str(e.reason)
          except ssl.SSLError, e:
-            print 'SSLError = ' + str(e.reason)
+            print 'SSLError'
          else:
             break
 
