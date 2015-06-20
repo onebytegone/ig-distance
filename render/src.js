@@ -19,7 +19,7 @@ $.getJSON("../data/summary.json", function(json) {
             'data': {
                'id': user + '-' + key,
                'weight':
-                  (fields['likesToward'][key] * 0.4
+                  (fields['likesToward'][key] * 0.3
                   + fields['commentsOnPosts'][key]
                   + fields['commentsToward'][key]).toFixed(2),
                'source': user,
