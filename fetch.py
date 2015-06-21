@@ -59,13 +59,35 @@ def callAPI(username, userID, endpoint, file):
    data = getattr(api, endpoint)(userID)
    dataStore.store(data, [username], file)
 
+def fetchPosts(username, userID):
+   data = api.posts(userID)
+
+   posts = data['data']
+   fullPosts = []
+   for post in posts:
+      postID = post['id']
+
+      if post['comments']['count'] != len(post['comments']['data']):
+         post['all_comments'] = api.commentsForPost(postID)['data']
+      else:
+         post['all_comments'] = post['comments']['data']
+
+      if post['likes']['count'] != len(post['likes']['data']):
+         post['all_likes'] = api.likesForPost(postID)['data']
+      else:
+         post['all_likes'] = post['likes']['data']
+
+      fullPosts.append(post)
+
+   dataStore.store(fullPosts, [username], 'posts')
+
 
 def storeUser(username):
    userID = queryForUserID(username)
    callAPI(username, userID, 'userInfo', 'userinfo')
    callAPI(username, userID, 'follows', 'follows')
    callAPI(username, userID, 'followedBy', 'followed-by')
-   callAPI(username, userID, 'posts', 'posts')
+   fetchPosts(username, userID)
 
 
 access_token = retrieveAccessToken()
