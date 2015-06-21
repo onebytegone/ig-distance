@@ -23,13 +23,17 @@ print userGroup
 summary = {}
 
 def getPostsForUser(user):
-   return dataStore.fetch([user], 'posts').itervalues().next()['data']
+   return dataStore.fetch([user], 'posts').itervalues().next()
 
 def userInList(user, list):
+   if 'data' in list:
+      list = list['data']
    return any(x for x in list if x['username'] == user)
 
 def userDidCommentOnPost(user, comments):
-   return any(x for x in comments['data'] if x['from']['username'] == user)
+   if 'data' in comments:
+      comments = comments['data']
+   return any(x for x in comments if x['from']['username'] == user)
 
 def doesUserFollowUser(source, target):
    followsList = dataStore.fetch([source], 'follows').itervalues().next()
@@ -38,17 +42,19 @@ def doesUserFollowUser(source, target):
 def likesTowardsPostsOf(source, target):
    stats = getPostsForUser(target)
 
-   return reduce(lambda carry, x: carry + (1 if userInList(source, x['likes']['data']) else 0), stats, 0)
+   return reduce(lambda carry, x: carry + (1 if userInList(source, x['all_likes']) else 0), stats, 0)
 
 def commentsOnPostsOf(source, target):
    stats = getPostsForUser(target)
 
-   return reduce(lambda carry, x: carry + (1 if  userDidCommentOnPost(source, x['comments']) else 0), stats, 0)
+   return reduce(lambda carry, x: carry + (1 if  userDidCommentOnPost(source, x['all_comments']) else 0), stats, 0)
 
 def commentsAtUserInPosts(posts, source, target):
    total = 0
    for post in posts:
-      allComments = post['comments']['data']
+      allComments = post['all_comments']
+      if 'data' in allComments:
+         allComments = allComments['data']
       filteredComments = filter(lambda x: x['from']['username'] == source, allComments)
       total += len(filter(lambda x: '@'+target in x['text'], filteredComments))
 
@@ -64,8 +70,13 @@ def extractAllComments(group):
    comments = []
    for user in group:
       posts = getPostsForUser(user)
-      foundComments = map(lambda x: x['comments']['data'], posts)
-      foundComments = list(itertools.chain(*foundComments )) #flatten list
+      foundComments = []
+      for x in posts:
+         cmt = x['all_comments']
+         if 'data' in cmt:
+            cmt = cmt['data']
+         foundComments += cmt
+      #foundComments = list(itertools.chain(*foundComments )) #flatten list
       comments += foundComments
    dataStore.store(comments, [], 'all_comments')
 
