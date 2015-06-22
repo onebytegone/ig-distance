@@ -57,7 +57,8 @@ function buildGraph(nodes, edges) {
                'line-color': '#B6B6B6',
                'target-arrow-color': '#B6B6B6',
                'content': 'data(weight)',
-               'z-index': 10
+               'z-index': 10,
+               'text-background-color': '#ccc'
             })
          .selector('edge[follow = 0]')
             .css({
@@ -78,7 +79,8 @@ function buildGraph(nodes, edges) {
          .selector('edge.outgoing, edge.incoming')
             .css({
                'font-weight': 'bold',
-               'font-size': '1.5em'
+               'font-size': '1.5em',
+               'text-background-opacity': 0.9
             })
          .selector('.outgoing')
             .css({
