@@ -26,13 +26,9 @@ def getPostsForUser(user):
    return dataStore.fetch([user], 'posts').itervalues().next()
 
 def userInList(user, list):
-   if 'data' in list:
-      list = list['data']
    return any(x for x in list if x['username'] == user)
 
 def userDidCommentOnPost(user, comments):
-   if 'data' in comments:
-      comments = comments['data']
    return any(x for x in comments if x['from']['username'] == user)
 
 def doesUserFollowUser(source, target):
@@ -53,8 +49,6 @@ def commentsAtUserInPosts(posts, source, target):
    total = 0
    for post in posts:
       allComments = post['all_comments']
-      if 'data' in allComments:
-         allComments = allComments['data']
       filteredComments = filter(lambda x: x['from']['username'] == source, allComments)
       total += len(filter(lambda x: '@'+target in x['text'], filteredComments))
 
@@ -73,10 +67,7 @@ def extractAllComments(group):
       foundComments = []
       for x in posts:
          cmt = x['all_comments']
-         if 'data' in cmt:
-            cmt = cmt['data']
          foundComments += cmt
-      #foundComments = list(itertools.chain(*foundComments )) #flatten list
       comments += foundComments
    dataStore.store(comments, [], 'all_comments')
 
